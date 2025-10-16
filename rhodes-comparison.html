@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhodes Recording Comparison</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #a0a0a0;
+            margin-bottom: 40px;
+            font-size: 14px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .file-selector {
+            margin-bottom: 30px;
+        }
+
+        .file-selector label {
+            display: block;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #e0e0e0;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .radio-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .radio-option {
+            position: relative;
+        }
+
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .radio-option label {
+            display: block;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 13px;
+            margin: 0;
+            text-transform: none;
+            letter-spacing: 0;
+            font-weight: 500;
+        }
+
+        .radio-option input[type="radio"]:checked + label {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .radio-option label:hover {
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .progress-container {
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.1s linear;
+            border-radius: 4px;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #a0a0a0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .loading {
+            text-align: center;
+            color: #a0a0a0;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+            background: #4ade80;
+        }
+
+        .status-indicator.loading {
+            background: #fbbf24;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Rhodes Recording Comparison</h1>
+        <p class="subtitle">Compare different recording techniques</p>
+
+        <div class="file-selector">
+            <label>Select Recording:</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <input type="radio" id="file1" name="audioFile" value="Harp to Camden.wav" checked>
+                    <label for="file1">Harp to Camden</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="file2" name="audioFile" value="Harp to Effects.wav">
+                    <label for="file2">Harp to Effects</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="file3" name="audioFile" value="Rail to Camden.wav">
+                    <label for="file3">Rail to Camden</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="file4" name="audioFile" value="Rail to Effects.wav">
+                    <label for="file4">Rail to Effects</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="time-display">
+                <span id="currentTime">0:00</span>
+                <span id="duration">0:00</span>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="playBtn">Play</button>
+            <button id="pauseBtn">Pause</button>
+            <button id="stopBtn">Stop</button>
+        </div>
+
+        <div class="loading" id="status">
+            <span class="status-indicator" id="statusDot"></span>
+            <span id="statusText">Ready</span>
+        </div>
+    </div>
+
+    <script>
+        class RhodesComparison {
+            constructor() {
+                this.audioElements = {};
+                this.currentFile = 'Harp to Camden.wav';
+                this.isPlaying = false;
+                this.currentTime = 0;
+
+                this.initializeElements();
+                this.preloadAudio();
+                this.attachEventListeners();
+            }
+
+            initializeElements() {
+                this.playBtn = document.getElementById('playBtn');
+                this.pauseBtn = document.getElementById('pauseBtn');
+                this.stopBtn = document.getElementById('stopBtn');
+                this.progressBar = document.getElementById('progressBar');
+                this.progressFill = document.getElementById('progressFill');
+                this.currentTimeDisplay = document.getElementById('currentTime');
+                this.durationDisplay = document.getElementById('duration');
+                this.statusText = document.getElementById('statusText');
+                this.statusDot = document.getElementById('statusDot');
+            }
+
+            preloadAudio() {
+                const files = [
+                    'Harp to Camden.wav',
+                    'Harp to Effects.wav',
+                    'Rail to Camden.wav',
+                    'Rail to Effects.wav'
+                ];
+
+                this.updateStatus('Loading audio files...', true);
+                let loadedCount = 0;
+
+                files.forEach(file => {
+                    const audio = new Audio(file);
+                    audio.preload = 'auto';
+
+                    audio.addEventListener('canplaythrough', () => {
+                        loadedCount++;
+                        if (loadedCount === files.length) {
+                            this.updateStatus('Ready', false);
+                        }
+                    });
+
+                    audio.addEventListener('timeupdate', () => {
+                        if (this.audioElements[this.currentFile] === audio) {
+                            this.updateProgress();
+                        }
+                    });
+
+                    audio.addEventListener('loadedmetadata', () => {
+                        if (this.audioElements[this.currentFile] === audio) {
+                            this.updateDuration();
+                        }
+                    });
+
+                    audio.addEventListener('ended', () => {
+                        this.isPlaying = false;
+                        this.playBtn.textContent = 'Play';
+                    });
+
+                    this.audioElements[file] = audio;
+                });
+            }
+
+            attachEventListeners() {
+                this.playBtn.addEventListener('click', () => this.play());
+                this.pauseBtn.addEventListener('click', () => this.pause());
+                this.stopBtn.addEventListener('click', () => this.stop());
+
+                this.progressBar.addEventListener('click', (e) => this.seek(e));
+
+                document.querySelectorAll('input[name="audioFile"]').forEach(radio => {
+                    radio.addEventListener('change', (e) => this.switchFile(e.target.value));
+                });
+            }
+
+            play() {
+                const audio = this.audioElements[this.currentFile];
+                audio.play();
+                this.isPlaying = true;
+                this.playBtn.textContent = 'Playing...';
+            }
+
+            pause() {
+                const audio = this.audioElements[this.currentFile];
+                audio.pause();
+                this.isPlaying = false;
+                this.playBtn.textContent = 'Play';
+            }
+
+            stop() {
+                const audio = this.audioElements[this.currentFile];
+                audio.pause();
+                audio.currentTime = 0;
+                this.isPlaying = false;
+                this.playBtn.textContent = 'Play';
+                this.updateProgress();
+            }
+
+            switchFile(newFile) {
+                const oldAudio = this.audioElements[this.currentFile];
+                const newAudio = this.audioElements[newFile];
+
+                // Save current state
+                const wasPlaying = this.isPlaying;
+                const currentTime = oldAudio.currentTime;
+
+                // Pause old audio
+                oldAudio.pause();
+
+                // Switch to new audio and restore state
+                this.currentFile = newFile;
+                newAudio.currentTime = currentTime;
+
+                // Continue playing if we were playing before
+                if (wasPlaying) {
+                    newAudio.play();
+                }
+
+                this.updateDuration();
+                this.updateProgress();
+            }
+
+            seek(e) {
+                const audio = this.audioElements[this.currentFile];
+                const rect = this.progressBar.getBoundingClientRect();
+                const pos = (e.clientX - rect.left) / rect.width;
+                audio.currentTime = pos * audio.duration;
+            }
+
+            updateProgress() {
+                const audio = this.audioElements[this.currentFile];
+                const progress = (audio.currentTime / audio.duration) * 100;
+                this.progressFill.style.width = `${progress}%`;
+                this.currentTimeDisplay.textContent = this.formatTime(audio.currentTime);
+            }
+
+            updateDuration() {
+                const audio = this.audioElements[this.currentFile];
+                if (audio.duration && !isNaN(audio.duration)) {
+                    this.durationDisplay.textContent = this.formatTime(audio.duration);
+                }
+            }
+
+            formatTime(seconds) {
+                if (!seconds || isNaN(seconds)) return '0:00';
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs.toString().padStart(2, '0')}`;
+            }
+
+            updateStatus(text, isLoading) {
+                this.statusText.textContent = text;
+                if (isLoading) {
+                    this.statusDot.classList.add('loading');
+                } else {
+                    this.statusDot.classList.remove('loading');
+                }
+            }
+        }
+
+        // Initialize the player when the page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            new RhodesComparison();
+        });
+    </script>
+</body>
+</html>
