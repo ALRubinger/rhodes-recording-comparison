@@ -203,26 +203,18 @@
 <body>
     <div class="container">
         <h1>Rhodes Recording Comparison</h1>
-        <p class="subtitle">Compare different recording techniques</p>
+        <p class="subtitle">The Rhodes Stage 73 keyboard has a passive circuit that puts too much load on the pickup array. We should not use the "Input" jack on the front rail, but rather bypass it entirely and pick up source from the harp. Additionally, the next component in the chain needs to have an input impedence above 1.5G Ohms to prevent the same loading. After that, you're free to use effects pedals which are already tuned for instrument-level inputs. This switcher demonstrates how improper impedence matching affects Rhodes high frequency rolloff.</p>
 
         <div class="file-selector">
             <label>Select Recording:</label>
             <div class="radio-group">
                 <div class="radio-option">
                     <input type="radio" id="file1" name="audioFile" value="Harp to Camden.wav" checked>
-                    <label for="file1">Harp to Camden</label>
-                </div>
-                <div class="radio-option">
-                    <input type="radio" id="file2" name="audioFile" value="Harp to Effects.wav">
-                    <label for="file2">Harp to Effects</label>
-                </div>
-                <div class="radio-option">
-                    <input type="radio" id="file3" name="audioFile" value="Rail to Camden.wav">
-                    <label for="file3">Rail to Camden</label>
+                    <label for="file1">Harp > Active DI / High-Z @ 1.5M Ohms > Effects Chain</label>
                 </div>
                 <div class="radio-option">
                     <input type="radio" id="file4" name="audioFile" value="Rail to Effects.wav">
-                    <label for="file4">Rail to Effects</label>
+                    <label for="file4">Input Jack > Effects Chain</label>
                 </div>
             </div>
         </div>
@@ -277,8 +269,6 @@
             preloadAudio() {
                 const files = [
                     'Harp to Camden.wav',
-                    'Harp to Effects.wav',
-                    'Rail to Camden.wav',
                     'Rail to Effects.wav'
                 ];
 
