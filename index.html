@@ -205,16 +205,34 @@
         <h1>Rhodes Recording Comparison</h1>
         <p class="subtitle">The Rhodes Stage 73 keyboard has a passive circuit that puts too much load on the pickup array. We should not use the "Input" jack on the front rail, but rather bypass it entirely and pick up source from the harp. Additionally, the next component in the chain needs to have an input impedence above 1.5G Ohms to prevent the same loading. After that, you're free to use effects pedals which are already tuned for instrument-level inputs. This switcher demonstrates how improper impedence matching affects Rhodes high frequency rolloff.</p>
 
+        <p class="subtitle">
+            Chain for After:
+            <br>
+            • 1980 Rhodes Stage 73 - Harp RCA > 1/4"<br>
+            • <a href="https://www.cranborne-audio.com/camden500" style="color: #667eea; text-decoration: none;">Cranborne Audio Camden 500 Series Preamp</a> w/ front panel High-Z Input<br>
+            • <a href="https://franklinaud.io/products/ra-20-stereo-re-amplifier" style="color: #667eea; text-decoration: none;">Franklin Audio RA-20</a><br>
+            • <a href="https://www.surfyindustries.com/surfybearcompact" style="color: #667eea; text-decoration: none;">Surfybear Compact Reverb</a><br>
+            • <a href="https://www.surfyindustries.com/surfytrem-deluxe" style="color: #667eea; text-decoration: none;">SurfyTrem Deluxe</a>
+        </p>
+
+        <p class="subtitle">
+            Chain for Before:
+            <br>
+            • 1980 Rhodes Stage 73 - Input jack on Rail<br>
+            • <a href="https://www.surfyindustries.com/surfybearcompact" style="color: #667eea; text-decoration: none;">Surfybear Compact Reverb</a><br>
+            • <a href="https://www.surfyindustries.com/surfytrem-deluxe" style="color: #667eea; text-decoration: none;">SurfyTrem Deluxe</a>
+        </p>
+
         <div class="file-selector">
             <label>Select Recording:</label>
             <div class="radio-group">
                 <div class="radio-option">
                     <input type="radio" id="file1" name="audioFile" value="Harp to Camden.wav" checked>
-                    <label for="file1">Harp > Active DI / High-Z @ 1.5M Ohms > Effects Chain</label>
+                    <label for="file1">After</label>
                 </div>
                 <div class="radio-option">
                     <input type="radio" id="file4" name="audioFile" value="Rail to Effects.wav">
-                    <label for="file4">Input Jack > Effects Chain</label>
+                    <label for="file4">Before</label>
                 </div>
             </div>
         </div>
